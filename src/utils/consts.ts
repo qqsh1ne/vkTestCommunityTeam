@@ -1,1 +1,1 @@
-// export const API_URL = 'https://communityteam.free.beeceptor.com';
+export const API_URL = 'https://communityteam.free.beeceptor.com';
