@@ -1,4 +1,3 @@
-import './App.css';
 import GroupsList from "./components/GroupsList/GroupsList.tsx";
 import {ConfigProvider} from "@vkontakte/vkui";
 import '@vkontakte/vkui/dist/vkui.css';

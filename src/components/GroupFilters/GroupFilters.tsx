@@ -4,18 +4,21 @@ import {useActions} from "../../hooks/useActions.ts";
 
 const GroupFilters = () => {
 
-    const {filterByPrivacy, filterByColor, filterByFriends} = useActions();
+    const {setPrivacyFilter, setColorFilter, setFriendsFilter, filterGroups} = useActions();
 
     const handlePrivacyChange = (evt: ChangeEvent<HTMLInputElement>) => {
-        filterByPrivacy(evt.target.value);
+        setPrivacyFilter(evt.target.value);
+        filterGroups();
     };
 
     const handleColorChange = (evt: ChangeEvent<HTMLInputElement>) => {
-        filterByColor(evt.target.value);
+        setColorFilter(evt.target.value);
+        filterGroups();
     };
 
     const handleFriendsChange = (evt: ChangeEvent<HTMLInputElement>) => {
-        filterByFriends(evt.target.value);
+        setFriendsFilter(evt.target.value);
+        filterGroups();
     };
 
     return (

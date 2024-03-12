@@ -1,13 +1,14 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {api} from "../api/api.ts";
 import {IGroup, IGroupsState} from "../../types/GroupsTypes.ts";
+import {colorFilter, friendsFilter, privacyFilter} from "../../utils/filters.ts";
 
 const initialState: IGroupsState = {
     groups: [],
     filteredGroups: [],
-    color: 'any',
-    privacy: 'any',
-    containsFriends: 'any',
+    color: 'all',
+    privacy: 'all',
+    containsFriends: 'all',
     isError: false,
 }
 
@@ -15,46 +16,21 @@ export const groupsSlice = createSlice({
     name: 'groups',
     initialState,
     reducers: {
-        filterByPrivacy: (state, {payload}) => {
-            console.log(payload);
+        filterGroups: (state) => {
+            let currentList = state.groups;
+            currentList = privacyFilter(currentList, state.privacy) as IGroup[];
+            currentList = colorFilter(currentList, state.color) as IGroup[];
+            currentList = friendsFilter(currentList, state.containsFriends) as IGroup[];
+            return {...state, filteredGroups: currentList}
+        },
+        setPrivacyFilter: (state, {payload}) => {
             state.privacy = payload;
-            switch (payload) {
-                case 'all':
-                    state.filteredGroups = [...state.groups];
-                    return;
-                case 'close':
-                    state.filteredGroups = [...state.groups.filter((group) => group.closed)];
-                    return;
-                case 'open':
-                    state.filteredGroups = [...state.groups.filter((group) => !group.closed)];
-                    return;
-                default:
-                    return;
-            }
         },
-        filterByColor: (state, {payload}) => {
+        setColorFilter: (state, {payload}) => {
             state.color = payload;
-            if (payload === 'all') {
-                state.filteredGroups = [...state.groups];
-                return;
-            }
-            state.filteredGroups = [...state.groups.filter((group) => group.avatar_color === payload)];
         },
-        filterByFriends: (state, {payload}) => {
+        setFriendsFilter: (state, {payload}) => {
             state.containsFriends = payload;
-            switch (payload) {
-                case 'all':
-                    state.filteredGroups = [...state.groups];
-                    return;
-                case 'contains':
-                    state.filteredGroups = [...state.groups.filter((group) => group.friends)];
-                    return;
-                case 'not':
-                    state.filteredGroups = [...state.groups.filter((group) => !group.friends)];
-                    return;
-                default:
-                    return;
-            }
         },
     },
     extraReducers: builder => {
